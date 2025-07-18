@@ -1,0 +1,47 @@
+name: Python CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]  # 主分支推送触发
+  pull_request:
+    branches: [ "main" ]   # PR合并到主分支时触发
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true  # 取消重复任务
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4  # 检出代码:cite[8]
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+        cache: "pip"  # 自动缓存依赖:cite[4]
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install pytest
+
+    - name: Run tests
+      run: pytest tests/  # 执行单元测试:cite[6]
+
+  deploy-docs:
+    needs: test  # 依赖测试阶段
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'  # 仅主分支部署
+    steps:
+    - name: Build documentation
+      run: |
+        mkdir _build
+        echo "Project documentation" > _build/index.html  # 替换为实际构建命令
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./_build  # 文档输出目录:cite[8]
