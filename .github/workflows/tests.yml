@@ -29,7 +29,7 @@ jobs:
         pip install pytest
 
     - name: Run tests
-      run: test_report_checker pdf-report-checker/tests/  # 执行单元测试:cite[6]
+      run: pytest pdf-report-checker/tests/  # 执行单元测试:cite[6]
 
   deploy-docs:
     needs: test  # 依赖测试阶段
