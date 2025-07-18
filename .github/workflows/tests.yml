@@ -23,15 +23,28 @@ jobs:
         python-version: "3.10"
         cache: "pip"
 
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y poppler-utils
+    # 列出文件用于调试
+    - name: List files for debugging
+      run: ls -la
 
+    # 安装系统依赖（如果不需要可以移除）
+    # - name: Install system dependencies
+    #   run: |
+    #     sudo apt-get update
+    #     sudo apt-get install -y poppler-utils
+
+    # 安装Python依赖
     - name: Install Python dependencies
       run: |
-        pip install -r ./requirements.txt  # 使用当前目录下的文件
-        pip install pytest
+        # 尝试多个可能的路径
+        if [ -f "requirements.txt" ]; then
+          pip install -r requirements.txt
+        elif [ -f "pdf-report-checker/requirements.txt" ]; then
+          pip install -r pdf-report-checker/requirements.txt
+        else
+          # 如果找不到requirements.txt，直接安装必要包
+          pip install pdfplumber flask pytest
+        fi
 
     - name: Setup PYTHONPATH
       run: echo "PYTHONPATH=${{ github.workspace }}/pdf-report-checker" >> $GITHUB_ENV
