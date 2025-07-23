@@ -3,6 +3,16 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Python 临时文件
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE 文件
+.idea/
+.vscode/
+
 # C extensions
 *.so
 
