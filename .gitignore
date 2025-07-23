@@ -13,6 +13,9 @@ __pycache__/
 .idea/
 .vscode/
 
+# pytest 缓存目录
+.pytest_cache/
+
 # C extensions
 *.so
 
