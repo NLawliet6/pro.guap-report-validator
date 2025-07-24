@@ -45,18 +45,3 @@ jobs:
     # 使用 Python 模块方式运行 pytest
     - name: Run tests
       run: python -m pytest pdf-report-checker/tests/
-
-  deploy-docs:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    steps:
-    - name: Build documentation
-      run: |
-        mkdir _build
-        echo "Project documentation" > _build/index.html
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./_build
